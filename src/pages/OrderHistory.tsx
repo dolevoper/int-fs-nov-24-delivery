@@ -5,34 +5,7 @@ import { listOrders, timestampFormater, type OrderList } from "../models/order";
 import styles from "./OrderHistory.module.scss";
 
 export function OrderHistory() {
-    const [orders, setOrders] = useState<OrderList>();
-    const [error, setError] = useState<string>();
-
-    useEffect(() => {
-        let isCanceled = false;
-
-        setOrders(undefined);
-        setError(undefined);
-        listOrders()
-            .then((orders) => {
-                if (isCanceled) {
-                    return;
-                }
-
-                setOrders(orders);
-            })
-            .catch((error) => {
-                if (isCanceled) {
-                    return;
-                }
-
-                setError(error);
-            });
-
-        return () => {
-            isCanceled = true;
-        };
-    }, []);
+    const { error, orders } = useOrders();
 
     if (error) {
         return (
@@ -86,4 +59,37 @@ function OrderListItem({ phase, timestamp, restaurant }: OrderList[number]) {
             <a className={styles.goToDetails} href="#">See details</a>
         </article>
     );
+}
+
+function useOrders() {
+    const [orders, setOrders] = useState<OrderList>();
+    const [error, setError] = useState<string>();
+
+    useEffect(() => {
+        let isCanceled = false;
+
+        setOrders(undefined);
+        setError(undefined);
+        listOrders()
+            .then((orders) => {
+                if (isCanceled) {
+                    return;
+                }
+
+                setOrders(orders);
+            })
+            .catch((error) => {
+                if (isCanceled) {
+                    return;
+                }
+
+                setError(error);
+            });
+
+        return () => {
+            isCanceled = true;
+        };
+    }, []);
+
+    return { orders, error };
 }
