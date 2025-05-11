@@ -11,6 +11,8 @@ import styles from "./App.module.scss";
 //    * get items from "server"
 // 3. Tie it all together (save orders in local storage)
 // 4. Update order details and history to show items' price and total cost etc...
+// 5. Implement generic useAsync hook
+// 6. Solve prop-drilling and synced states problem??
 
 type AppPage =
   | "order-history"
@@ -19,11 +21,17 @@ type AppPage =
 
 export function App() {
   const [currentPage, setCurrentPage] = useState<AppPage>("order-history");
+  const [currentOrderId, setCurrentOrderId] = useState<string>();
 
   return (
     <>
       <Nav onLinkClick={setCurrentPage} />
-      <Main page={currentPage} />
+      <Main
+        page={currentPage}
+        setPage={setCurrentPage}
+        currentOrderId={currentOrderId}
+        setCurrentOrderId={setCurrentOrderId}
+      />
     </>
   );
 }
@@ -45,11 +53,24 @@ function Nav({ onLinkClick }: NavProps) {
   );
 }
 
-type MainProps = { page: AppPage };
-function Main({ page }: MainProps) {
+type MainProps = {
+  page: AppPage,
+  setPage: (page: AppPage) => void,
+  currentOrderId?: string,
+  setCurrentOrderId: (id?: string) => void;
+};
+function Main({ page, setPage, currentOrderId, setCurrentOrderId }: MainProps) {
   switch (page) {
-    case "order-history": return <OrderHistory />;
-    case "track-order": return <TrackOrder orderId="225914" />;
+    case "order-history": return <OrderHistory onSeeDetailsClick={(id) => {
+      setPage("track-order");
+      setCurrentOrderId(id);
+    }} />;
+    case "track-order":
+      if (!currentOrderId) {
+        return <p>error</p>;
+      }
+
+      return <TrackOrder orderId={currentOrderId} />;
     case "new-order": return <NewOrder />;
   }
 }

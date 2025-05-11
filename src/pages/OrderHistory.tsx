@@ -4,7 +4,8 @@ import { listOrders, timestampFormater, type OrderList } from "../models/order";
 
 import styles from "./OrderHistory.module.scss";
 
-export function OrderHistory() {
+type OrderHistoryProps = { onSeeDetailsClick: (id: string) => void };
+export function OrderHistory({ onSeeDetailsClick }: OrderHistoryProps) {
     const { error, orders } = useOrders();
 
     if (error) {
@@ -28,13 +29,13 @@ export function OrderHistory() {
     return (
         <Main>
             <h1>Order history</h1>
-            <OrderList orders={orders} />
+            <OrderList orders={orders} onSeeDetailsClick={onSeeDetailsClick} />
         </Main>
     );
 }
 
-type OrderListProps = { orders: OrderList };
-function OrderList({ orders }: OrderListProps) {
+type OrderListProps = { orders: OrderList, onSeeDetailsClick: (id: string) => void };
+function OrderList({ orders, onSeeDetailsClick }: OrderListProps) {
     if (!orders.length) {
         return (
             <p>No orders yet... Let's order something to eat!</p>
@@ -45,18 +46,22 @@ function OrderList({ orders }: OrderListProps) {
         <ol>
             {orders
                 .sort((a, b) => b.timestamp - a.timestamp)
-                .map((order) => <li key={order.id}><OrderListItem {...order} /></li>)}
+                .map((order) => <li key={order.id}><OrderListItem {...order} onSeeDetailsClick={() => onSeeDetailsClick(order.id)} /></li>)}
         </ol>
     );
 }
 
-function OrderListItem({ phase, timestamp, restaurant }: OrderList[number]) {
+type OrderListItemProps = OrderList[number] & { onSeeDetailsClick: () => void };
+function OrderListItem({ phase, timestamp, restaurant, onSeeDetailsClick }: OrderListItemProps) {
     return (
         <article className={styles.order}>
             <p>{phase}</p>
             <time dateTime={timestamp.toString()}>{timestampFormater.format(timestamp)}</time>
             <p>{restaurant}</p>
-            <a className={styles.goToDetails} href="#">See details</a>
+            <a className={styles.goToDetails} href="#" onClick={(e) => {
+                e.preventDefault();
+                onSeeDetailsClick();
+            }}>See details</a>
         </article>
     );
 }
