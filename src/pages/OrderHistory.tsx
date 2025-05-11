@@ -29,9 +29,9 @@ export function OrderHistory() {
                 setError(error);
             });
 
-            return () => {
-                isCanceled = true;
-            };
+        return () => {
+            isCanceled = true;
+        };
     }, []);
 
     if (error) {
@@ -52,28 +52,32 @@ export function OrderHistory() {
         );
     }
 
-    if (!orders.length) {
-        return (
-            <Main>
-                <h1>Order history</h1>
-                <p>No orders yet... Let's order something to eat!</p>
-            </Main>
-        );
-    }
-
     return (
         <Main>
             <h1>Order history</h1>
-            <ol>
-                {orders
-                    .sort((a, b) => b.timestamp - a.timestamp)
-                    .map((order) => <li key={order.id}><Order {...order} /></li>)}
-            </ol>
+            <OrderList orders={orders} />
         </Main>
     );
 }
 
-function Order({ phase, timestamp, restaurant }: OrderList[number]) {
+type OrderListProps = { orders: OrderList };
+function OrderList({ orders }: OrderListProps) {
+    if (!orders.length) {
+        return (
+            <p>No orders yet... Let's order something to eat!</p>
+        );
+    }
+
+    return (
+        <ol>
+            {orders
+                .sort((a, b) => b.timestamp - a.timestamp)
+                .map((order) => <li key={order.id}><OrderListItem {...order} /></li>)}
+        </ol>
+    );
+}
+
+function OrderListItem({ phase, timestamp, restaurant }: OrderList[number]) {
     return (
         <article className={styles.order}>
             <p>{phase}</p>
