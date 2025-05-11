@@ -1,0 +1,13 @@
+.order {
+    display: flex;
+    gap: 1rem;
+}
+
+.goToDetails {
+    margin-inline-start: auto;
+    color: var(--secondary-600);
+
+    &:hover {
+        color: var(--secondary-500);
+    }
+}

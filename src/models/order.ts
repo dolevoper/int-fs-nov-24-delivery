@@ -17,25 +17,22 @@ export type Order = {
     items: string[],
 };
 
-export async function listOrders() {
-    return [];
+export type OrderList = Omit<Order, "items">[];
+
+export async function listOrders(): Promise<OrderList> {
+    await randomDelay();
+
+    return [
+        { id: "111111", timestamp: new Date(2025, 4, 7, 19).valueOf(), restaurant: "a nice place", phase: "arrived" },
+        { id: "222222", timestamp: new Date(2025, 4, 7, 19, 30).valueOf(), restaurant: "a nice place", phase: "arrived" },
+        { id: "333333", timestamp: new Date(2025, 4, 7, 20).valueOf(), restaurant: "a nice place", phase: "arrived" },
+        { id: "444444", timestamp: new Date(2025, 4, 11, 19).valueOf(), restaurant: "a nice place", phase: "received" },
+        { id: "555555", timestamp: new Date(2025, 4, 11, 19, 5).valueOf(), restaurant: "a nice place", phase: "opened" },
+    ];
 }
 
 export async function getOrderById(id: string): Promise<Order> {
-    await new Promise<void>((resolve, reject) => {
-        const delay = id === "112335" ? 500 : (Math.random() * 2000) + 700;
-
-        return setTimeout(
-            () => {
-                if (id === "404") {
-                    reject();
-                } else {
-                    resolve();
-                }
-            },
-            delay
-        );
-    });
+    await randomDelay();
 
     return {
         id,
@@ -49,3 +46,19 @@ export async function getOrderById(id: string): Promise<Order> {
         ],
     };
 }
+
+export const timestampFormater = new Intl.DateTimeFormat("he", {
+    timeStyle: "short",
+    dateStyle: "short",
+});
+
+const randomDelay = () => new Promise<void>((resolve) => {
+    const delay = (Math.random() * 2000) + 700;
+
+    return setTimeout(
+        () => {
+            resolve();
+        },
+        delay
+    );
+});

@@ -1,14 +1,9 @@
 import { useEffect, useState } from "react";
-import { getOrderById, orderPhases, type Order, type OrderPhase } from "../models/order";
+import { getOrderById, orderPhases, timestampFormater, type Order, type OrderPhase } from "../models/order";
 import { Main } from "../components/Main";
 
 import styles from "./TrackOrder.module.scss";
 import cover from "../assets/order-status-cover.jpg";
-
-const timestampFormater = new Intl.DateTimeFormat("he", {
-    timeStyle: "short",
-    dateStyle: "short",
-});
 
 type TrackOrderProps = {
     orderId: string,
