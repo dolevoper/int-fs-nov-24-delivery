@@ -1,0 +1,14 @@
+.appNav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding: 1rem;
+
+    a {
+        color: var(--primary-600);
+
+        &:hover {
+            color: var(--primary-500);
+        }
+    }
+}
