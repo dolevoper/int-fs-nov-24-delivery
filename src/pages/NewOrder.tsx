@@ -1,5 +1,10 @@
+import { Main } from "../components/Main";
+
 export function NewOrder() {
     return (
-        <p>New history</p>
+        <Main>
+            <h1>New order</h1>
+            <p>New order</p>
+        </Main>
     );
 }
