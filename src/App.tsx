@@ -1,7 +1,7 @@
 import { useState, type MouseEvent } from "react";
-import { TrackOrder } from "./TrackOrder";
-import { OrderHistory } from "./OrderHistory";
-import { NewOrder } from "./NewOrder";
+import { TrackOrder } from "./pages/TrackOrder";
+import { OrderHistory } from "./pages/OrderHistory";
+import { NewOrder } from "./pages/NewOrder";
 
 import styles from "./App.module.scss";
 

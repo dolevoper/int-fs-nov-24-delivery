@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import styles from "./TrackOrder.module.scss";
-import cover from "./assets/order-status-cover.jpg";
-import { getOrderById, orderPhases, type Order, type OrderPhase } from "./order";
+import cover from "../assets/order-status-cover.jpg";
+import { getOrderById, orderPhases, type Order, type OrderPhase } from "../models/order";
 
 const timestampFormater = new Intl.DateTimeFormat("he", {
     timeStyle: "short",
