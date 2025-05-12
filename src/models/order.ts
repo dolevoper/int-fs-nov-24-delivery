@@ -17,34 +17,30 @@ export type Order = {
     items: string[],
 };
 
+const orders: Record<Order["id"], Order> = {
+    "111111": { id: "111111", timestamp: new Date(2025, 4, 7, 19).valueOf(), restaurant: "a nice place", phase: "arrived", items: [] },
+    "222222": { id: "222222", timestamp: new Date(2025, 4, 7, 19, 30).valueOf(), restaurant: "a nice place", phase: "arrived", items: [] },
+    "333333": { id: "333333", timestamp: new Date(2025, 4, 7, 20).valueOf(), restaurant: "a nice place", phase: "arrived", items: [] },
+    "444444": { id: "444444", timestamp: new Date(2025, 4, 11, 19).valueOf(), restaurant: "a nice place", phase: "received", items: [] },
+    "555555": { id: "555555", timestamp: new Date(2025, 4, 11, 19, 5).valueOf(), restaurant: "a nice place", phase: "opened", items: [] },
+};
+
 export type OrderList = Omit<Order, "items">[];
 
 export async function listOrders(): Promise<OrderList> {
     await randomDelay();
 
-    return [
-        { id: "111111", timestamp: new Date(2025, 4, 7, 19).valueOf(), restaurant: "a nice place", phase: "arrived" },
-        { id: "222222", timestamp: new Date(2025, 4, 7, 19, 30).valueOf(), restaurant: "a nice place", phase: "arrived" },
-        { id: "333333", timestamp: new Date(2025, 4, 7, 20).valueOf(), restaurant: "a nice place", phase: "arrived" },
-        { id: "444444", timestamp: new Date(2025, 4, 11, 19).valueOf(), restaurant: "a nice place", phase: "received" },
-        { id: "555555", timestamp: new Date(2025, 4, 11, 19, 5).valueOf(), restaurant: "a nice place", phase: "opened" },
-    ];
+    return Object.values(orders);
 }
 
 export async function getOrderById(id: string): Promise<Order> {
     await randomDelay();
 
-    return {
-        id,
-        phase: "making",
-        timestamp: new Date(2025, 4, 7, 19).valueOf(),
-        restaurant: "A nice place",
-        items: [
-            "Burger",
-            "Fries",
-            "Soda",
-        ],
-    };
+    if (!(id in orders)) {
+        throw new Error(`Order ${id} not found.`);
+    }
+
+    return orders[id];
 }
 
 export const timestampFormater = new Intl.DateTimeFormat("he", {

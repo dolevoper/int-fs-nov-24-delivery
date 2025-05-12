@@ -25,12 +25,12 @@ export function TrackOrder({ orderId }: TrackOrderProps) {
 
                 setOrder(order);
             })
-            .catch((error) => {
+            .catch((error: Error) => {
                 if (isCanceled) {
                     return;
                 }
 
-                setError(error);
+                setError(error.message);
             });
 
         return () => {
