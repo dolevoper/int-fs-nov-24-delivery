@@ -1,60 +1,12 @@
-import { useEffect, useState } from "react";
-import { getOrderById, orderPhases, timestampFormater, type Order, type OrderPhase } from "../models/order";
+import { useLoaderData } from "react-router";
+import { orderPhases, timestampFormater, type Order, type OrderPhase } from "../models/order";
 import { Main } from "../components/Main";
 
 import styles from "./TrackOrder.module.scss";
 import cover from "../assets/order-status-cover.jpg";
 
-type TrackOrderProps = {
-    orderId: string,
-};
-export function TrackOrder({ orderId }: TrackOrderProps) {
-    const [order, setOrder] = useState<Order>();
-    const [error, setError] = useState<string>();
-
-    useEffect(() => {
-        let isCanceled = false;
-
-        setOrder(undefined);
-        setError(undefined);
-        getOrderById(orderId)
-            .then((order) => {
-                if (isCanceled) {
-                    return;
-                }
-
-                setOrder(order);
-            })
-            .catch((error: Error) => {
-                if (isCanceled) {
-                    return;
-                }
-
-                setError(error.message);
-            });
-
-        return () => {
-            isCanceled = true;
-        };
-    }, [orderId]);
-
-    if (error) {
-        return (
-            <Main>
-                <h1>Your order status</h1>
-                <p>{error}</p>
-            </Main>
-        );
-    }
-
-    if (!order) {
-        return (
-            <Main>
-                <h1>Your order status</h1>
-                <p>Loading...</p>
-            </Main>
-        )
-    }
+export function TrackOrder() {
+    const order = useLoaderData<Order>();
 
     return (
         <Main>
