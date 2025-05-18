@@ -6,7 +6,7 @@ const schema = new Schema({
         required: true,
     },
     description: String,
-    imgSrc: String,
+    previewImageUrl: String,
     priceInAgorot: {
         type: String,
         required: true,
