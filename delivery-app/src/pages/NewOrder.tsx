@@ -53,10 +53,10 @@ function ItemsList({ onAddToOrderClick }: ItemsListProps) {
 }
 
 type MenuItemProps = Item & { onAddToOrderClick(): void }
-function MenuItem({ imgSrc, name, description, priceInAgorot, onAddToOrderClick }: MenuItemProps) {
+function MenuItem({ previewImageUrl, name, description, priceInAgorot, onAddToOrderClick }: MenuItemProps) {
     return (
         <>
-            <img src={imgSrc} alt="" />
+            <img src={previewImageUrl} alt="" />
             <h3>{name}</h3>
             <p>{description}</p>
             <p>{priceInAgorot / 100}₪</p>

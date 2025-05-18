@@ -15,3 +15,5 @@ app.use((req, _, next) => {
 app.use(json());
 
 app.use("/items", router);
+
+app.use(express.static("public"));
