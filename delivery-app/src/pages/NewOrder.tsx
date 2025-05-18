@@ -1,10 +1,10 @@
 import { useState } from "react";
+import { useLoaderData, useNavigate } from "react-router";
 import { Main } from "../components/Main";
 import { type Item } from "../models/item";
 import { PrimaryButton } from "../components/PrimaryButton";
 
 import styles from "./NewOrder.module.scss";
-import { useLoaderData } from "react-router";
 
 export function NewOrder() {
     const [order, setOrder] = useState<Record<string, number>>({});
@@ -68,6 +68,7 @@ function MenuItem({ previewImageUrl, name, description, priceInAgorot, onAddToOr
 type OrderSummaryProps = { order: Record<string, number> };
 function OrderSummary({ order }: OrderSummaryProps) {
     const items = useLoaderData<Item[]>();
+    const navigate = useNavigate();
 
     if (Object.keys(order).length === 0) {
         return <p>Let's add some items to your order!</p>;
@@ -88,7 +89,25 @@ function OrderSummary({ order }: OrderSummaryProps) {
                     );
                 })}
             </ul>
-            <PrimaryButton>Place order</PrimaryButton>
+            <PrimaryButton onClick={async () => {
+                try {
+                    await fetch("http://localhost:5000/orders", {
+                        method: "POST",
+                        body: JSON.stringify({
+                            phase: "received",
+                            restaurant: "INT cafe",
+                            items: Object.entries(order).map(([itemId, quantity]) => ({ itemId, quantity })),
+                        }),
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                    });
+
+                    navigate("/order-history");
+                } catch (err) {
+                    console.error(err);
+                }
+            }}>Place order</PrimaryButton>
         </>
     );
 }
