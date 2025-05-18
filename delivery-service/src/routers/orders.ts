@@ -15,3 +15,27 @@ router.post("/", async (req, res) => {
         res.end();
     }
 });
+
+router.get("/", async (_, res) => {
+    try {
+        const orders = await Order.find();
+
+        res.json(orders);
+    } catch (err) {
+        console.error(err);
+        res.status(500);
+        res.end();
+    }
+});
+
+router.get("/:id", async (req, res) => {
+    try {
+        const order = await Order.findById(req.params.id).populate("items.itemId");
+
+        res.json(order);
+    } catch (err) {
+        console.error(err);
+        res.status(500);
+        res.end();
+    }
+});

@@ -22,7 +22,7 @@ const schema = new Schema({
         type: [{
             itemId: {
                 type: Schema.Types.ObjectId,
-                ref: 'Story',
+                ref: 'Item',
                 required: true,
             },
             quantity: {

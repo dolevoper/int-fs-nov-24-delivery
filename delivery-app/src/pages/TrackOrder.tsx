@@ -7,6 +7,7 @@ import cover from "../assets/order-status-cover.jpg";
 
 export function TrackOrder() {
     const order = useLoaderData<Order>();
+    const timestamp = new Date(order.createdAt);
 
     return (
         <Main overflow>
@@ -14,14 +15,13 @@ export function TrackOrder() {
             <img src={cover} className={styles.cover} alt="" />
             <Steps phase={order.phase} />
             <article>
-                <p>Order number: <span>{order.id}</span></p>
                 <p>Ordered from: <span>{order.restaurant}</span></p>
-                <p>Ordered on: <time dateTime={order.timestamp.toString()}>{timestampFormater.format(order.timestamp)}</time></p>
+                <p>Ordered on: <time dateTime={timestamp.toString()}>{timestampFormater.format(timestamp)}</time></p>
             </article>
             <details>
                 <summary>Order details</summary>
                 <ul>
-                    {order.items.map((item, index) => <li key={index}>{item}</li>)}
+                    {order.items.map(({ itemId, quantity }) => <li key={itemId._id}>{itemId.name} x${quantity}</li>)}
                 </ul>
             </details>
         </Main>
