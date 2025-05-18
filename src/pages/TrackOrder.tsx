@@ -9,7 +9,7 @@ export function TrackOrder() {
     const order = useLoaderData<Order>();
 
     return (
-        <Main>
+        <Main overflow>
             <h1>Your order status</h1>
             <img src={cover} className={styles.cover} alt="" />
             <Steps phase={order.phase} />

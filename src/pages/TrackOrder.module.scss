@@ -54,6 +54,8 @@
 
 .cover {
     border-radius: 50%;
+    max-height: 50vh;
+    align-self: center;
     aspect-ratio: 1;
     object-fit: cover;
 }

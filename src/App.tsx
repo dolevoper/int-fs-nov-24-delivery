@@ -13,7 +13,7 @@ export function App() {
 
 export function Nav() {
   return (
-    <nav>
+    <nav className={styles.navContainer}>
       <menu className={styles.appNav}>
         <li><Link to="/order-history">Order history</Link></li>
         <li><Link to="/new-order">New order</Link></li>

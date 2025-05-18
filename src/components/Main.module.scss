@@ -16,4 +16,8 @@
     &[data-large] {
         --max-width: 80ch;
     }
+
+    &[data-overflow] {
+        overflow: visible;
+    }
 }
