@@ -16,7 +16,7 @@ export type Order = {
     phase: OrderPhase,
     createdAt: string,
     restaurant: string,
-    items: { itemId: Item, quantity: number }[],
+    items: { item: Item, quantity: number }[],
 };
 
 export type OrderList = Omit<Order, "items">[];
@@ -29,6 +29,10 @@ export async function listOrders(): Promise<OrderList> {
 
 export async function getOrderById(id: string): Promise<Order> {
     const res = await fetch(`http://localhost:5000/orders/${id}`);
+
+    if (!res.ok) {
+        throw new Error(await res.text());
+    }
 
     return res.json();
 }
