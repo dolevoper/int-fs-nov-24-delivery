@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
-import { apiClient, setToken } from "../models/apiClient";
+import { apiClient, setRefreshToken, setToken } from "../models/apiClient";
 import { useCenterRoot } from "../hooks/useCenterRoot";
 import { Main } from "../components/Main";
 import { PrimaryButton } from "../components/PrimaryButton";
@@ -18,9 +18,10 @@ export function Register() {
         const user = Object.fromEntries(formData);
         const res = await apiClient.post("/register", user);
 
-        const { token } = res.data;
+        const { accessToken, refreshToken } = res.data;
 
-        setToken(token);
+        setToken(accessToken);
+        setRefreshToken(refreshToken);
         navigate("/");
     }
 

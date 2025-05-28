@@ -1,5 +1,5 @@
 import { Link, Outlet, useNavigate } from "react-router";
-import { clearToken, getToken } from "./models/apiClient";
+import { clearRefreshToken, clearToken, getToken } from "./models/apiClient";
 import { DefaultButton } from "./components/DefaultButton";
 
 import styles from "./App.module.scss";
@@ -28,6 +28,7 @@ export function Nav() {
         <p>Hello {getUserName()}</p>
         <DefaultButton onClick={() => {
           clearToken();
+          clearRefreshToken();
           navigate("/login");
         }}>Logout</DefaultButton>
       </article>
