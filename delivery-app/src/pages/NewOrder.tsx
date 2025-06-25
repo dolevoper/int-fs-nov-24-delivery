@@ -46,8 +46,8 @@ function ItemsList({ onAddToOrderClick }: ItemsListProps) {
 
     return (
         <ul>
-            {items.map((item) => <li key={item._id} className={styles.menuItem}>
-                <MenuItem {...item} onAddToOrderClick={() => onAddToOrderClick(item._id)} />
+            {items.map((item) => <li key={item.id} className={styles.menuItem}>
+                <MenuItem {...item} onAddToOrderClick={() => onAddToOrderClick(item.id)} />
             </li>)}
         </ul>
     );
@@ -79,7 +79,7 @@ function OrderSummary({ order }: OrderSummaryProps) {
         <>
             <ul>
                 {Object.entries(order).map(([id, quantity]) => {
-                    const item = items?.find((item) => item._id === id);
+                    const item = items?.find((item) => item.id === id);
 
                     return (
                         <li key={id} className={styles.orderEntry}>

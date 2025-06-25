@@ -1,16 +1,15 @@
-import { Schema, model } from "mongoose";
+import { dbClient } from "./db";
 
-const schema = new Schema({
-    name: {
-        type: String,
-        required: true,
-    },
-    description: String,
-    previewImageUrl: String,
-    priceInAgorot: {
-        type: String,
-        required: true,
-    },
-}, { timestamps: true });
+type Item = {
+    id: string,
+    name: string,
+    description: string,
+    previewImageUrl: string,
+    priceInAgorot: number,
+};
 
-export const Item = model("Item", schema);
+export async function getAll() {
+    const res = await dbClient.execute("SELECT * FROM items");
+
+    return res.rows as unknown as Item[];
+}

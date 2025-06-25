@@ -1,7 +1,7 @@
 import { Application, RequestHandler } from "express";
 import jwt from "jsonwebtoken";
 import { expressjwt } from "express-jwt";
-import { User } from "./models/user";
+import { createUser, getByCredentials, isEmailTaken } from "./models/user";
 
 export function useAuth(app: Application) {
     app.post("/register", register);
@@ -13,8 +13,7 @@ export function useAuth(app: Application) {
 }
 
 function createToken(userId: string, userName: string ) {
-    return jwt.sign({ sub: userId, userName }, process.env.SESSION_SECRET!, { expiresIn: 60 * 10 });
-    // return jwt.sign({ sub: userId, userName }, process.env.SESSION_SECRET!, { expiresIn: 10 });
+    return jwt.sign({ sub: userId, userName }, process.env.SESSION_SECRET!, { expiresIn: 60 * 60 * 24 });
 }
 
 const register: RequestHandler = async (req, res) => {
@@ -27,23 +26,18 @@ const register: RequestHandler = async (req, res) => {
             return;
         }
 
-        const existingUser = await User.findOne({ email });
-
-        if (existingUser) {
+        if (await isEmailTaken(email)) {
             res.status(409);
             res.send(`User with email ${email} already exists`);
             return;
         }
 
         // TODO: validate password
-        const newUser = await User.create({ email, fullName });
 
-        newUser.password = password;
-
-        await newUser.save();
+        const id = await createUser(email, password, fullName);
 
         res.json({
-            token: createToken(newUser.id, newUser.fullName),
+            token: createToken(id, fullName),
         });
     } catch (err) {
         console.error(err);
@@ -68,22 +62,10 @@ const login: RequestHandler = async (req, res) => {
             return;
         }
 
-        const user = await User.findOne({ email }).schemaLevelProjections(false);
-
-        if (!user) {
-            res.status(401);
-            res.end();
-            return;
-        }
-
-        if (!user.isSamePassword(password)) {
-            res.status(401);
-            res.end();
-            return;
-        }
+        const user = await getByCredentials(email, password);
 
         res.json({
-            token: createToken(user.id, user.fullName),
+            token: createToken(user.id as string, user.fullName as string),
         });
     } catch (err) {
         console.error(err);

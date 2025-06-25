@@ -13,7 +13,7 @@ export const orderPhases = [
 export type OrderPhase = typeof orderPhases[number];
 
 export type Order = {
-    _id: string,
+    id: string,
     phase: OrderPhase,
     createdAt: string,
     restaurant: string,

@@ -1,7 +1,7 @@
 import { apiClient } from "./apiClient";
 
 export type Item = {
-    _id: string,
+    id: string,
     name: string,
     description: string,
     previewImageUrl: string,

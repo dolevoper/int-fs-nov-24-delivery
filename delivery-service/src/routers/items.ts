@@ -1,11 +1,11 @@
 import { Router } from "express";
-import { Item } from "../models/item";
+import { getAll } from "../models/item";
 
 export const router = Router();
 
 router.get("/", async (_, res) => {
     try {
-        const items = await Item.find();
+        const items = await getAll();
 
         res.json(items);
     } catch (err) {

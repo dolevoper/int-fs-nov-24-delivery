@@ -21,7 +21,7 @@ export function TrackOrder() {
             <details>
                 <summary>Order details</summary>
                 <ul>
-                    {order.items.map(({ item, quantity }) => <li key={item._id}>{item.name} x${quantity}</li>)}
+                    {order.items.map(({ item, quantity }) => <li key={item.id}>{item.name} x{quantity}</li>)}
                 </ul>
             </details>
         </Main>

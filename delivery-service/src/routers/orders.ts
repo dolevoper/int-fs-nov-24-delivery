@@ -1,12 +1,20 @@
 import { Router } from "express";
-import { Order } from "../models/order";
-import { Types } from "mongoose";
+import { createOrder, getOrderDetails, listOrders } from "../models/order";
+import { randomUUID } from "crypto";
 
 export const router = Router();
 
 router.post("/", async (req, res) => {
     try {
-        await Order.create(req.body);
+        const createdAt = Date.now();
+
+        await createOrder({
+            id: randomUUID(),
+            orderingUserId: req.auth.sub,
+            createdAt: createdAt,
+            lastUpdatedAt: createdAt,
+            ...req.body
+        });
 
         res.status(201);
         res.end();
@@ -17,9 +25,9 @@ router.post("/", async (req, res) => {
     }
 });
 
-router.get("/", async (_, res) => {
+router.get("/", async (req, res) => {
     try {
-        const orders = await Order.find();
+        const orders = await listOrders(req.auth.sub);
 
         res.json(orders);
     } catch (err) {
@@ -31,32 +39,7 @@ router.get("/", async (_, res) => {
 
 router.get("/:id", async (req, res) => {
     try {
-        const [order] = await Order.aggregate([
-            { $match: { _id: new Types.ObjectId(req.params.id) } },
-            { $lookup: {
-                from: "items",
-                localField: "items.itemId",
-                foreignField: "_id",
-                as: "items",
-                let: { items: "$items" },
-                pipeline: [
-                    { $replaceWith: {
-                        item: "$$ROOT",
-                        quantity: {
-                            $arrayElemAt: ["$$items.quantity", {
-                                $indexOfArray: ["$$items.itemId", "$$ROOT._id"],
-                            }],
-                        },
-                    } },
-                ],
-            } },
-        ]);
-
-        if (!order) {
-            res.status(404);
-            res.send(`Order ${req.params.id} not found`);
-            return;
-        }
+        const order = await getOrderDetails(req.params.id);
 
         res.json(order);
     } catch (err) {

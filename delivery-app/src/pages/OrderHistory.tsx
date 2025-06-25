@@ -27,13 +27,13 @@ function OrderList({ orders }: OrderListProps) {
         <ol>
             {orders
                 .sort((a, b) => new Date(b.createdAt).valueOf() - new Date(a.createdAt).valueOf())
-                .map((order) => <li key={order._id}><OrderListItem {...order} /></li>)}
+                .map((order) => <li key={order.id}><OrderListItem {...order} /></li>)}
         </ol>
     );
 }
 
 type OrderListItemProps = OrderList[number];
-function OrderListItem({ _id, phase, createdAt, restaurant }: OrderListItemProps) {
+function OrderListItem({ id, phase, createdAt, restaurant }: OrderListItemProps) {
     const timestamp = new Date(createdAt);
 
     return (
@@ -41,7 +41,7 @@ function OrderListItem({ _id, phase, createdAt, restaurant }: OrderListItemProps
             <p>{phase}</p>
             <time dateTime={timestamp.toString()}>{timestampFormater.format(timestamp)}</time>
             <p>{restaurant}</p>
-            <Link to={`/track-order/${_id}`} className={styles.goToDetails}>See details</Link>
+            <Link to={`/track-order/${id}`} className={styles.goToDetails}>See details</Link>
         </article>
     );
 }
